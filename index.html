@@ -6,19 +6,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/qr-code-styling/lib/qr-code-styling.js"></script>
   <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
     body {
       font-family: "Roboto", sans-serif;
       background: #f4f4f4;
-      margin: 0;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-      align-items: center;
-      justify-content: start;
-      padding: 20px;
-      gap: 20px;
+      min-height: 100vh; /* garante altura total da tela */
     }
 
+    .container {
+      flex: 1; /* ocupa o espaço disponível */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    h1{
+        margin-left: -15px;
+        font-size: 25px;
+        padding-left: 20px;
+        border-left: 2px solid black;
+    }
     .opcoes {
       display: flex;
       flex-direction: column;
@@ -52,14 +66,14 @@
 
     button {
       padding: 10px 25px;
-      background: #2f00ff;
+      background: #161616;
       border: none;
-      color: white;
+      color: rgb(255, 255, 255);
       border-radius: 4px;
       cursor: pointer;
     }
     button:hover {
-      background: #3d00cc;
+      background: #000000;
     }
 
     #canvas {
@@ -67,64 +81,65 @@
     }
 
     footer {
-      background: black;
+      background: #000000;
       color: white;
       font-size: 14px;
       text-align: center;
-      padding: 10px;
       width: 100%;
-      margin-top: auto;
+      margin-top: auto; /* empurra pro fim */
     }
   </style>
 </head>
 <body>
-  <h1>Gerador de QR Code Estilizado</h1>
+  <div class="container">
+    <h1>Gerador de QR Code Estilizado</h1>
 
-  <div class="opcoes">
-    <label>
-      Link:
-      <input type="text" id="link" placeholder="Cole o link aqui">
-    </label>
+    <div class="opcoes">
+      <label>
+        Link:
+        <input type="text" id="link" placeholder="Cole o link aqui">
+      </label>
 
-    <label>
-      Cor do QR:
-      <input type="color" id="corQr" value="#000000">
-    </label>
+      <label>
+        Cor do QR:
+        <input type="color" id="corQr" value="#000000">
+      </label>
 
-    <label>
-      Cor do Fundo:
-      <input type="color" id="corFundo" value="#ffffff">
-    </label>
+      <label>
+        Cor do Fundo:
+        <input type="color" id="corFundo" value="#ffffff">
+      </label>
 
-    <label>
-      <input type="checkbox" id="transparente"> Fundo transparente
-    </label>
+      <label>
+        <input type="checkbox" id="transparente"> Fundo transparente
+      </label>
 
-    <label>
-      Estilo dos pontos:
-      <select id="estilo">
-        <option value="square">Quadrado</option>
-        <option value="dots">Bolinha</option>
-        <option value="rounded">Arredondado</option>
-        <option value="classy">Losango</option>
-        <option value="star">Estrelas ⭐</option>
-      </select>
-    </label>
+      <label>
+        Estilo dos pontos:
+        <select id="estilo">
+          <option value="square">Quadrado</option>
+          <option value="dots">Bolinha</option>
+          <option value="rounded">Arredondado</option>
+          <option value="classy">Losango</option>
+          <option value="star">Estrelas ⭐</option>
+        </select>
+      </label>
 
-    <label>
-      Tamanho:
-      <select id="tamanho">
-        <option value="200">Pequeno (200px)</option>
-        <option value="300" selected>Médio (300px)</option>
-        <option value="400">Grande (400px)</option>
-      </select>
-    </label>
+      <label>
+        Tamanho:
+        <select id="tamanho">
+          <option value="200">Pequeno (200px)</option>
+          <option value="300" selected>Médio (300px)</option>
+          <option value="400">Grande (400px)</option>
+        </select>
+      </label>
 
-    <button onclick="gerarQRCode()">Gerar QR Code</button>
-    <button onclick="baixarQRCode()">Baixar QR Code</button>
+      <button onclick="gerarQRCode()">Gerar QR Code</button>
+      <button onclick="baixarQRCode()">Baixar QR Code</button>
+    </div>
+
+    <div id="canvas"></div>
   </div>
-
-  <div id="canvas"></div>
 
   <footer>
     <p>Desenvolvido por Giulia Cardoso</p>
