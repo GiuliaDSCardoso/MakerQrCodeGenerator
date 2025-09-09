@@ -1,218 +1,176 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Gerador de QR Code</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <title>QR Code Estilizado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling/lib/qr-code-styling.js"></script>
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: start;
+      padding: 20px;
+      gap: 20px;
+    }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            font-family: "Roboto", sans-serif;
-            background-color: #f4f4f4;
-        }
+    .opcoes {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    }
 
-        .container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            padding: 40px 20px;
-            text-align: center;
-        }
+    label {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        h1 {
-            font-size: 2rem;
-        }
+    input[type="text"], select {
+      padding: 8px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
 
-        .teste {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
+    input[type="color"] {
+      border: none;
+      width: 40px;
+      height: 30px;
+      cursor: pointer;
+    }
 
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            position: relative;
-        }
+    button {
+      padding: 10px 25px;
+      background: #2f00ff;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #3d00cc;
+    }
 
-        .input-wrapper {
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
+    #canvas {
+      margin-top: 15px;
+    }
 
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-            max-width: 90vw;
-            border: 1px solid rgba(128, 128, 128, 0.3);
-            border-radius: 4px;
-        }
-
-        .alert-icon {
-            width: 20px;
-            height:20px;
-            margin-left: 8px;
-            display: none;
-        }
-
-        .mensagem-erro {
-            color: red;
-            font-size: 14px;
-            
-            margin-top: 5px;
-            display: none;
-        }
-
-        button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 25px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #056fe0;
-        }
-
-        .botao-icone {
-            display: none;
-            width: 20px;
-            height: 20px;
-        }
-
-        canvas {
-            margin-top: 20px;
-            max-width: 90vw;
-        }
-
-        a {
-            display: block;
-            margin-top: 10px;
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        footer {
-            background-color: black;
-            font-size: 14px;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px 0;
-            width: 100%;
-        }
-
-        /* RESPONSIVO PARA TELAS PEQUENAS */
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            button {
-                width: 100%;
-                max-width: 400px;
-            }
-
-            input[type="text"] {
-                width: 90%;
-                max-width: 300px;
-            }
-
-            .teste {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .botao-texto {
-                display: none;
-            }
-
-            .botao-icone {
-                display: inline;
-            }
-        }
-    </style>
+    footer {
+      background: black;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      padding: 10px;
+      width: 100%;
+      margin-top: auto;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div>
-            <h1>Gerador de QR Code do <br> Lab. Maker</h1> 
-        </div>
-        
-        <div class="teste">
-            <div class="input-container">                
-                <div class="mensagem-erro" id="mensagemErro">Insira um link para gerar</div>
-                <div class="input-wrapper">
-                    <input type="text" id="link" placeholder="Cole o link aqui" required>
-                    <img src="iconealerta.png" alt="Ícone de alerta" class="alert-icon" id="alertaIcone">
-                </div>
-            </div>
+  <h1>Gerador de QR Code Estilizado</h1>
 
-            <button onclick="gerarQRCode()">
-                <span class="botao-texto">Gerar QR Code</span>
-                <img src="icone.png" alt="Ícone QR" class="botao-icone">
-            </button>
-        </div>
+  <div class="opcoes">
+    <label>
+      Link:
+      <input type="text" id="link" placeholder="Cole o link aqui">
+    </label>
 
-        <canvas id="qr-code"></canvas>
-        <a id="download" href="#" download="qrcode.png" style="display:none;">Baixar QR Code</a>
-    </div>
+    <label>
+      Cor do QR:
+      <input type="color" id="corQr" value="#000000">
+    </label>
 
-    <footer>
-        <p>Desenvolvido por Giulia Cardoso</p>
-    </footer>
+    <label>
+      Cor do Fundo:
+      <input type="color" id="corFundo" value="#ffffff">
+    </label>
 
-    <script>
-        function gerarQRCode() {
-            const linkInput = document.getElementById('link');
-            const link = linkInput.value.trim();
-            const mensagemErro = document.getElementById('mensagemErro');
-            const alertaIcone = document.getElementById('alertaIcone');
+    <label>
+      <input type="checkbox" id="transparente"> Fundo transparente
+    </label>
 
-            if (link === '') {
-                mensagemErro.style.display = 'block';
-                alertaIcone.style.display = 'inline';
-                return;
-            }
+    <label>
+      Estilo dos pontos:
+      <select id="estilo">
+        <option value="square">Quadrado</option>
+        <option value="dots">Bolinha</option>
+        <option value="rounded">Arredondado</option>
+        <option value="classy">Losango</option>
+        <option value="star">Estrelas ⭐</option>
+      </select>
+    </label>
 
-            mensagemErro.style.display = 'none';
-            alertaIcone.style.display = 'none';
+    <label>
+      Tamanho:
+      <select id="tamanho">
+        <option value="200">Pequeno (200px)</option>
+        <option value="300" selected>Médio (300px)</option>
+        <option value="400">Grande (400px)</option>
+      </select>
+    </label>
 
-            const qr = new QRious({
-                element: document.getElementById('qr-code'),
-                value: link,
-                size: 250,
-                level: 'H'
-            });
+    <button onclick="gerarQRCode()">Gerar QR Code</button>
+    <button onclick="baixarQRCode()">Baixar QR Code</button>
+  </div>
 
-            const downloadLink = document.getElementById('download');
-            downloadLink.href = document.getElementById('qr-code').toDataURL("image/png");
-            downloadLink.style.display = 'inline-block';
+  <div id="canvas"></div>
+
+  <footer>
+    <p>Desenvolvido por Giulia Cardoso</p>
+  </footer>
+
+  <script>
+    let qrCode;
+
+    function gerarQRCode() {
+      const link = document.getElementById("link").value.trim();
+      const corQr = document.getElementById("corQr").value;
+      const corFundo = document.getElementById("corFundo").value;
+      const transparente = document.getElementById("transparente").checked;
+      const estilo = document.getElementById("estilo").value;
+      const tamanho = parseInt(document.getElementById("tamanho").value);
+
+      if (!link) {
+        alert("Digite um link válido!");
+        return;
+      }
+
+      // cria ou recria o QR Code
+      qrCode = new QRCodeStyling({
+        width: tamanho,
+        height: tamanho,
+        data: link,
+        dotsOptions: {
+          color: corQr,
+          type: estilo
+        },
+        backgroundOptions: {
+          color: transparente ? "transparent" : corFundo
         }
-    </script>
+      });
+
+      document.getElementById("canvas").innerHTML = "";
+      qrCode.append(document.getElementById("canvas"));
+    }
+
+    function baixarQRCode() {
+      if (!qrCode) {
+        alert("Primeiro gere o QR Code!");
+        return;
+      }
+      qrCode.download({ name: "qrcode", extension: "png" });
+    }
+  </script>
 </body>
 </html>
